@@ -262,11 +262,12 @@ pip3 install -e .
 
 ### Create a new image
 
-You'll need to download a vanilla Raspbian distribution (Lite version is suggested for this purpose)
+You'll need to download a vanilla [Raspberry Pi OS](https://www.raspberrypi.org/software/operating-systems) distribution (Lite version is suggested for this purpose)
 and burn it on a microSD card.
 Then perform the following steps on your microSD card while it is mounted on your workstation.
 
-* [Enable the SSH daemon](https://howtoraspberrypi.com/how-to-raspberry-pi-headless-setup/) by creating an empty file in the boot directory (of the image) named as "ssh" (without any extension) 
+* [Enable the SSH daemon](https://howtoraspberrypi.com/how-to-raspberry-pi-headless-setup/) by creating an empty file in the boot directory (of the image) named as "ssh" (without any extension). Default username is "pi" and password is "raspberry".
+
 * Allow the device to connect to your network by creating a "wpa_supplicant.conf" file in the boot directory (of the image) with the following content:
 ```bash
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -278,13 +279,17 @@ network={
 	psk="The password of your WiFi network"
 }
 ```
+The RaspberryPi will get an IP from the DHCP of your network.
+
+* To have the changes written corectly, before the umount of the directories "rootfs" and "boot" type "sync" in a command line.
+
 * Move the microSD card from your workstation to the Raspberry-Pi and start the device
 
-Then execute the following steps after obtaining an SSH connection
-to your Raspberry-Pi.
-
-* [Automate the authentication process](https://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/) to connect to your device.
 To find the device's IP address, check your router's or access point's logs.
+
+After obtaining an SSH connection, execute the following steps to your Raspberry-Pi:
+
+* It is required to [Automate the authentication process](https://www.tecmint.com/ssh-passwordless-login-using-ssh-keygen-in-5-easy-steps/) to connect to your device. The following Ansible scripts need that functionality.
 
 * Install the following packages on your Raspberry-Pi device.
 ```bash
@@ -295,7 +300,9 @@ sudo apt-get install git ansible
 git clone https://github.com/eellak/epidose
 cd epidose/epidose/device
 ```
-* Execute the Ansible script by providing the relevant command-line arguments (see [section](#Ansible))
+* Execute the Ansible script by providing the relevant command-line arguments (see [section](#Ansible)). Be aware that the default user "pi" will be removed.
+
+
 ```bash
 sudo ansible-playbook install_and_configure.yml --tags "production|development" --extra-vars "eduroam_network_psk=password_of_the_epidose_eduroam_account"
 cd /home/epidose/epidose/epidose/device
@@ -316,7 +323,9 @@ all the defined _extra-vars_ are mandatory run epidose.
 
 _extra-vars_
 * password_of_the_epidose_eduroam_account is the password of the the
-  Eduroam account set up for Epidose.
+  Eduroam account set up for Epidose. Remove it if you don't own one.
+  
+Keep in mind that the execution of the above Ansible will take several minutes to finish.
 
 
 ## Running the client code
