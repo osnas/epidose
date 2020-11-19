@@ -281,7 +281,7 @@ network={
 ```
 The RaspberryPi will get an IP from the DHCP of your network.
 
-* To have the changes written corectly, before the umount of the directories "rootfs" and "boot" type "sync" in a command line.
+* To have the changes written correctly, before the umount of the directories "rootfs" and "boot" type "sync" in a command line.
 
 * Move the microSD card from your workstation to the Raspberry-Pi and start the device
 
