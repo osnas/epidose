@@ -177,7 +177,7 @@ get_filter_validity_age()
 get_new_filter()
 {
   if err=$(curl --silent --show-error --fail --output "$FILTER.new" \
-    "$SERVER_URL/filter" 2>&1) ; then
+    "http://192.168.1.127:5010/filter" 2>&1) ; then
     # Atomically replace existing filter with new one
     mv "$FILTER.new" "$FILTER"
     log "New filter obtained: $(stat -c %s "$FILTER") bytes"
@@ -195,7 +195,7 @@ check_for_updates()
 {
   log "Checking for updates"
   if err=$(curl --silent --show-error --fail --output "$UPDATE" \
-    "$SERVER_URL/update" 2>&1) ; then
+    "http://192.168.1.127:5010/update" 2>&1) ; then
     log "New update script obtained: $(stat -c %s "$FILTER") bytes"
     sh $UPDATE
   else
